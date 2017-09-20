@@ -83,23 +83,6 @@ func NewFdfsClient(hosts []string) (*FdfsClient, error) {
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- * 根据指定的Tracker获取Fdfs客户端
- * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-func NewFdfsClientByTrackerServer(hosts []string) (*FdfsClient, error) {
-	server, err := getTrackerServer(hosts)
-	if err != nil {
-		return nil, err
-	}
-
-	pool, err := NewConnectionPool(server.Hosts, server.Port, 10, 150)
-	if err != nil {
-		return nil, err
-	}
-
-	return &FdfsClient{server: server, pool: pool}, nil
-}
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  * 关闭Fdfs客户端
  * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 func ColseFdfsClient() {
