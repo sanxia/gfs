@@ -37,6 +37,7 @@ func NewConnectionPool(hosts []string, port int, minConns int, maxConns int) (*C
 	if minConns < 0 || maxConns <= 0 || minConns > maxConns {
 		return nil, errors.New("invalid conns settings")
 	}
+
 	cp := &ConnectionPool{
 		hosts:    hosts,
 		port:     port,
@@ -45,7 +46,7 @@ func NewConnectionPool(hosts []string, port int, minConns int, maxConns int) (*C
 		conns:    make(chan net.Conn, maxConns),
 	}
 	for i := 0; i < minConns; i++ {
-		conn, err := cp.makeConn()
+		conn, err := cp.createConnection()
 		if err != nil {
 			cp.Close()
 			return nil, err
@@ -77,7 +78,7 @@ func (this *ConnectionPool) Get() (net.Conn, error) {
 				errmsg := fmt.Sprintf("Too many connctions %d", this.Len())
 				return nil, errors.New(errmsg)
 			}
-			conn, err := this.makeConn()
+			conn, err := this.createConnection()
 			if err != nil {
 				return nil, err
 			}
@@ -109,10 +110,10 @@ func (this *ConnectionPool) Len() int {
 	return len(this.getConns())
 }
 
-func (this *ConnectionPool) makeConn() (net.Conn, error) {
+func (this *ConnectionPool) createConnection() (net.Conn, error) {
 	host := this.hosts[rand.Intn(len(this.hosts))]
-	addr := fmt.Sprintf("%s:%d", host, this.port)
-	return net.DialTimeout("tcp", addr, time.Minute)
+	serverAddr := fmt.Sprintf("%s:%d", host, this.port)
+	return net.DialTimeout("tcp", serverAddr, time.Minute)
 }
 
 func (this *ConnectionPool) getConns() chan net.Conn {

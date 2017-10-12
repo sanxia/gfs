@@ -202,14 +202,14 @@ type (
 	}
 
 	UploadResponse struct {
-		GroupName    string
-		RemoteFileId string
+		GroupName string
+		FileId    string
 	}
 
 	DownloadResponse struct {
-		RemoteFileId string
-		Content      interface{}
-		Size         int64
+		FileId  string
+		Content interface{}
+		Size    int64
 	}
 
 	DeleteResponse struct {
@@ -319,7 +319,7 @@ func (this *UploadResponse) unmarshal(data []byte) error {
 	}
 
 	remoteFilename := string(data[len(data)-buff.Len():])
-	this.RemoteFileId = this.GroupName + string(os.PathSeparator) + remoteFilename
+	this.FileId = this.GroupName + string(os.PathSeparator) + remoteFilename
 	return nil
 }
 

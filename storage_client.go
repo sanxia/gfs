@@ -343,7 +343,7 @@ func (this *StorageClient) storageDownloadFile(tc *TrackerClient,
 
 	//解析返回结果
 	resp := &DownloadResponse{}
-	resp.RemoteFileId = storeServ.groupName + string(os.PathSeparator) + remoteFilename
+	resp.FileId = storeServ.groupName + string(os.PathSeparator) + remoteFilename
 	if downloadType == FDFS_DOWNLOAD_TO_FILE {
 		resp.Content = localFilename
 	} else {
